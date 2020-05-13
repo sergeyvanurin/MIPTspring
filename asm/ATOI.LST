@@ -1,0 +1,70 @@
+Turbo Assembler	 Version 4.1	    02/26/20 13:36:22	    Page 1
+atoi.asm
+
+
+
+      1	0000			     .model tiny
+      2	0000			     .code
+      3				     org 100h
+      4
+      5
+      6	0100			     start:
+      7	0100  33 C0						     xor ax, ax
+      8	0102  B7 00						     mov bh, 00
+      9	0104  BF 0081						     mov di, 81h
+     10	0107  B1 0A						     mov cl, 10d
+     11	0109			     transform:
+     12	0109  8A 5D 01						     mov bl, byte [di]
+     13	010C  80 FB 24						     cmp bl, 36d
+     14	010F  74 0A						     je	finish
+     15
+     16								     ;cmp bl, 48
+     17								     ;jl error
+     18
+     19								     ;cmp bl, 57
+     20								     ;jl error
+     21
+     22	0111  80 EB 30						     sub bl, 48
+     23	0114  F6 E9						     imul cl
+     24	0116  03 C3						     add ax, bx
+     25
+     26	0118  47						     inc di
+     27	0119  EB EE						     jmp transform
+     28	011B			     finish:
+     29	011B  B8 4C00						     mov ax, 4c00h
+     30	011E  CD 21						     int 21h
+     31				     end start
+Turbo Assembler	 Version 4.1	    02/26/20 13:36:22	    Page 2
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "02/26/20"
+??FILENAME			  Text	 "atoi	  "
+??TIME				  Text	 "13:36:21"
+??VERSION			  Number 040A
+@32BIT				  Text	 0
+@CODE				  Text	 DGROUP
+@CODESIZE			  Text	 0
+@CPU				  Text	 0101H
+@CURSEG				  Text	 _TEXT
+@DATA				  Text	 DGROUP
+@DATASIZE			  Text	 0
+@FILENAME			  Text	 ATOI
+@INTERFACE			  Text	 000H
+@MODEL				  Text	 1
+@STACK				  Text	 DGROUP
+@WORDSIZE			  Text	 2
+FINISH				  Near	 DGROUP:011B
+START				  Near	 DGROUP:0100
+TRANSFORM			  Near	 DGROUP:0109
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+DGROUP				  Group
+  _DATA				  16  0000 Word	  Public  DATA
+  _TEXT				  16  0120 Word	  Public  CODE
+

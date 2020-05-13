@@ -1,0 +1,73 @@
+Turbo Assembler	 Version 4.1	    03/11/20 15:30:05	    Page 1
+memchr.asm
+
+
+
+      1	0000			     .model tiny
+      2	0000			     .code
+      3				     org 100h
+      4
+      5	0100			     start:
+      6	0100  BF 011Br				     lea di, msg
+      7	0103  B0 48			     mov al, 'H'
+      8	0105  B9 0005			     mov cx, 5
+      9
+     10	0108  E8 0006			     call memchr
+     11	010B  B4 02			     mov ah, 02h
+     12	010D  8A 14			     mov dl, [si]
+     13	010F  CD 21			     int 21h
+     14
+     15	0111			     memchr:
+     16	0111  33 F6						     xor si, si
+     17	0113  F2> AE						     repne scasb
+     18	0115  75 03						     jnz exit
+     19
+     20	0117  8B F7						     mov si, di
+     21	0119  4F						     dec di
+     22
+     23
+     24	011A			     exit:
+     25	011A  C3						     ret
+     26
+     27
+     28	011B  48 45 4C 4C 4F 00	     msg db 'HELLO', 0h
+     29	0121  57 4F 52 4C 44 00	     msg1 db 'WORLD', 0h
+     30
+     31
+     32				     end start
+Turbo Assembler	 Version 4.1	    03/11/20 15:30:05	    Page 2
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "03/11/20"
+??FILENAME			  Text	 "memchr  "
+??TIME				  Text	 "15:30:05"
+??VERSION			  Number 040A
+@32BIT				  Text	 0
+@CODE				  Text	 DGROUP
+@CODESIZE			  Text	 0
+@CPU				  Text	 0101H
+@CURSEG				  Text	 _TEXT
+@DATA				  Text	 DGROUP
+@DATASIZE			  Text	 0
+@FILENAME			  Text	 MEMCHR
+@INTERFACE			  Text	 000H
+@MODEL				  Text	 1
+@STACK				  Text	 DGROUP
+@WORDSIZE			  Text	 2
+EXIT				  Near	 DGROUP:011A
+MEMCHR				  Near	 DGROUP:0111
+MSG				  Byte	 DGROUP:011B
+MSG1				  Byte	 DGROUP:0121
+START				  Near	 DGROUP:0100
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+DGROUP				  Group
+  _DATA				  16  0000 Word	  Public  DATA
+  _TEXT				  16  0127 Word	  Public  CODE
+

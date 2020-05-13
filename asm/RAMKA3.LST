@@ -1,0 +1,415 @@
+Turbo Assembler	 Version 4.1	    03/02/20 14:47:58	    Page 1
+ramka3.asm
+
+
+
+      1	0000			     .model tiny
+      2	0000			     .code
+      3				     org 100h
+      4				     ;-------------------------------------
+      5	      =0019		     SCREEN_WIDTH equ 25
+      6	      =0050		     SCREEN_LENGTH equ 80
+      7	      =000F		     BOX_WIDTH equ 15
+      8	      =0028		     BOX_LENGTH	equ 40
+      9	      =B800		     VIDEO_SEG equ 0b800h
+     10	      =2221		     GREEN_SHADOW equ 2221h
+     11	      =0081		     PSP_COMMAND_LINE equ 81h
+     12				     ;-------------------------------------
+     13				     ;symbols[0] TL_CORNER
+     14	      =0000		     TL_CORNER equ 0
+     15				     ;symbols[1] TR_CORNER
+     16	      =0002		     TR_CORNER equ 2
+     17				     ;symbols[2] BL_CORNER
+     18	      =0004		     BL_CORNER equ 4
+     19				     ;symbols[3] BR_CORNER
+     20	      =0006		     BR_CORNER equ 6
+     21				     ;symbols[4] VERTICAL_LINE
+     22	      =0008		     VERTICAL_LINE equ 8
+     23				     ;symbols[5] HOR_LINE
+     24	      =000A		     HOR_LINE equ 10
+     25				     ;symbols[6] INSIDE
+     26	      =000C		     INSIDE equ	12
+     27				     ;---------------------------------------
+     28
+     29
+     30	0100			     start:
+     31	0100  BF 0081					     mov di, PSP_COMMAND_LINE				     ;argument adress
+     32	0103  B9 0004					     mov cx, 4								    +
+     33				     ;argument count
+     34	0106  07*(????)					     symbols dw	7 DUP(?)
+     35
+     36	0114			     get_dimensions:
+     37
+     38	0114  E8 0130					     call atoi								    +
+     39				     ;
+     40	0117  50					     push ax								    +
+     41				     ;gets dimensions from PSP
+     42	0118  47					     inc di								    +
+     43				     ;
+     44
+     45	0119  E2 F9					     loop get_dimensions
+     46
+     47	011B  B9 0007					     mov cx, 7
+     48	011E			     get_symbols:
+     49	011E  E8 0146					     call symbol_to_ascii
+     50	0121  50					     push ax
+     51
+     52	0122  E2 FA					     loop get_symbols
+     53
+     54	0124  E8 0120					     call atoi
+     55	0127  50					     push ax
+     56
+     57
+Turbo Assembler	 Version 4.1	    03/02/20 14:47:58	    Page 2
+ramka3.asm
+
+
+
+     58	0128  BE 000C					     mov si, 12
+     59	012B  B9 0007					     mov cx, 7
+     60	012E  5B					     pop bx
+     61	012F  D1 E3 D1 E3 D1 E3	D1+			     shl bx, 8
+     62	      E3 D1 E3 D1 E3 D1	E3+
+     63	      D1 E3
+     64
+     65	013F			     fill_array:
+     66	013F  58					     pop ax
+     67	0140  0B C3					     or	ax, bx
+     68	0142  89 84 0106r				     mov symbols[si], ax
+     69	0146  4E					     dec si
+     70	0147  4E					     dec si
+     71	0148  E2 F5					     loop fill_array
+     72
+     73
+     74	014A  5B					     pop bx								    +
+     75				     ;
+     76	014B  58					     pop ax								    +
+     77				     ;puts dimensions into designated registers
+     78	014C  D1 E3 D1 E3 D1 E3	D1+			     shl bx, 8								    +
+     79	      E3 D1 E3 D1 E3 D1	E3+  ;dx - X , di - Y, bh - y, bl - x
+     80	      D1 E3
+     81	015C  0B D8					     or	bx, ax								    +
+     82				     ;
+     83	015E  5F					     pop di								    +
+     84				     ;
+     85	015F  5A					     pop dx								    +
+     86				     ;
+     87
+     88	0160  53					     push bx								    +
+     89				     ;
+     90	0161  52					     push dx								    +
+     91				     ;
+     92	0162  57					     push di								    +
+     93				     ;
+     94	0163  D1 EF D1 EF				     shr di, 2								    +
+     95				     ;
+     96	0167  D1 EA D1 EA				     shr dx, 2								    +
+     97				     ;
+     98	016B  8B CF					     mov cx, di								    +
+     99				     ;
+    100	016D  D1 E1 D1 E1 D1 E1	D1+			     shl cx, 8								    +
+    101	      E1 D1 E1 D1 E1 D1	E1+  ; zoom arithmetics
+    102	      D1 E1
+    103	017D  0B CA					     or	cx, dx								    +
+    104				     ;
+    105	017F  03 D9					     add bx, cx								    +
+    106				     ;
+    107	0181  D1 E7					     shl di, 1								    +
+    108				     ;
+    109	0183  D1 E2					     shl dx, 1								    +
+    110				     ;
+    111	0185  E8 0012					     call draw_box						     ;
+    112	0188  5F					     pop di								    +
+    113				     ;
+    114	0189  5A					     pop dx								    +
+Turbo Assembler	 Version 4.1	    03/02/20 14:47:58	    Page 3
+ramka3.asm
+
+
+
+    115				     ;
+    116	018A  5B					     pop bx								    +
+    117				     ;
+    118
+    119	018B  B4 86					     mov ah, 86h
+    120	018D  B9 0002					     mov cx, 2
+    121	0190  CD 15					     int 15h
+    122
+    123
+    124	0192  E8 0005					     call draw_box
+    125
+    126	0195  B8 4C00					     mov ax, 4c00h
+    127	0198  CD 21					     int 21h
+    128
+    129
+    130
+    131
+    132				     ;--------------------------------------------------
+    133				     ;dx - X of	a box
+    134				     ;di - Y of	a box
+    135				     ;bh - y of	a corner
+    136				     ;bl - x of	a corner
+    137				     ;
+    138				     ;draws a box from given dimensions	and coordinates
+    139				     ;--------------------------------------------------
+    140	019A			     draw_box:
+    141	019A  83 EA 02					     sub dx, 2
+    142
+    143	019D  E8 0088					     call get_pos
+    144
+    145	01A0  53					     push bx
+    146	01A1  BB B800					     mov bx, VIDEO_SEG
+    147	01A4  8E C3					     mov es, bx
+    148	01A6  5B					     pop bx
+    149
+    150	01A7  A1 0106r					     mov ax, symbols[TL_CORNER]
+    151	01AA  26: 89 07					     mov es:[bx], ax
+    152	01AD  43					     inc bx
+    153	01AE  43					     inc bx
+    154
+    155	01AF  8B CA					     mov cx, dx
+    156	01B1  A1 0110r					     mov ax, symbols[HOR_LINE]
+    157	01B4  E8 0080					     call horizontal_line
+    158
+    159	01B7  A1 0108r					     mov ax, symbols[TR_CORNER]
+    160	01BA  26: 89 07					     mov es:[bx], ax
+    161	01BD  43					     inc bx
+    162	01BE  43					     inc bx
+    163
+    164	01BF  81 C3 009C				     add bx, SCREEN_LENGTH * 2 - 4			     ;
+    165	01C3  2B DA					     sub bx, dx								    +
+    166				     ;	     add bx, (SCREEN_LENGTH - di + 2)*2
+    167	01C5  2B DA					     sub bx, dx								    +
+    168				     ;
+    169
+    170
+    171	01C7  A1 0112r					     mov ax, symbols[INSIDE]
+Turbo Assembler	 Version 4.1	    03/02/20 14:47:58	    Page 4
+ramka3.asm
+
+
+
+    172
+    173	01CA  8B CF					     mov cx, di
+    174
+    175	01CC			     next:
+    176
+    177	01CC  51					     push cx
+    178	01CD  A1 010Er					     mov ax, symbols[VERTICAL_LINE]
+    179	01D0  26: 89 07					     mov es:[bx], ax
+    180	01D3  43					     inc bx
+    181	01D4  43					     inc bx
+    182
+    183	01D5  8B CA					     mov cx, dx
+    184	01D7  A1 0112r					     mov ax, symbols[INSIDE]
+    185	01DA  E8 005A					     call horizontal_line
+    186
+    187	01DD  A1 010Er					     mov ax, symbols[VERTICAL_LINE]
+    188	01E0  26: 89 07					     mov es:[bx], ax
+    189	01E3  43					     inc bx
+    190	01E4  43					     inc bx
+    191
+    192	01E5  26: C7 07	2221				     mov es:[bx], GREEN_SHADOW
+    193
+    194	01EA  81 C3 009C				     add bx, SCREEN_LENGTH * 2 - 4			     ;
+    195	01EE  2B DA					     sub bx, dx								    +
+    196				     ;	     add bx, (SCREEN_LENGTH - di - 2)*2
+    197	01F0  2B DA					     sub bx, dx								    +
+    198				     ;
+    199
+    200	01F2  59					     pop cx
+    201
+    202	01F3  E2 D7					     loop next
+    203
+    204
+    205	01F5  A1 010Ar					     mov ax, symbols[BL_CORNER]
+    206	01F8  26: 89 07					     mov es:[bx], ax
+    207	01FB  43					     inc bx
+    208	01FC  43					     inc bx
+    209
+    210	01FD  8B CA					     mov cx, dx
+    211	01FF  A1 0110r					     mov ax, symbols[HOR_LINE]
+    212	0202  E8 0032					     call horizontal_line
+    213
+    214	0205  A1 010Cr					     mov ax, symbols[BR_CORNER]
+    215	0208  26: 89 07					     mov es:[bx], ax
+    216	020B  43					     inc bx
+    217	020C  43					     inc bx
+    218
+    219	020D  26: C7 07	2221				     mov es:[bx], GREEN_SHADOW
+    220	0212  43					     inc bx
+    221	0213  43					     inc bx
+    222
+    223
+    224	0214  81 C3 009C				     add bx, SCREEN_LENGTH * 2 - 4			     ;
+    225	0218  2B DA					     sub bx, dx								    +
+    226				     ;	     add bx, (SCREEN_LENGTH - di - 2)*2
+    227	021A  2B DA					     sub bx, dx
+    228
+Turbo Assembler	 Version 4.1	    03/02/20 14:47:58	    Page 5
+ramka3.asm
+
+
+
+    229	021C  8B CA					     mov cx, dx
+    230	021E  83 C1 02					     add cx, 2
+    231	0221  B8 2221					     mov ax, GREEN_SHADOW
+    232	0224  E8 0010					     call horizontal_line
+    233
+    234
+    235
+    236	0227  C3					     ret
+    237				     ;---------------------------------------
+    238				     ;calculates position from coordinates
+    239				     ;
+    240				     ;bh - height
+    241				     ;bl - width
+    242				     ;---------------------------------------
+    243
+    244	0228			     get_pos:
+    245
+    246	0228  50						     push ax
+    247
+    248	0229  B0 50						     mov al, 80d
+    249	022B  F6 E7						     mul bh
+    250	022D  32 FF						     xor bh, bh
+    251	022F  03 C3						     add ax, bx
+    252	0231  D1 E0						     shl ax, 1
+    253
+    254	0233  8B D8						     mov bx, ax
+    255
+    256	0235  58						     pop ax
+    257
+    258	0236  C3						     ret
+    259
+    260				     ;---------------------------------
+    261				     ;draws line with given symbol from	given point
+    262				     ;
+    263				     ;input:
+    264				     ;ax - symbol
+    265				     ;cx - line	length
+    266				     ;bx - starting point
+    267				     ;---------------------------------
+    268	0237			     horizontal_line:
+    269	0237  57						     push di
+    270	0238  53						     push bx
+    271	0239  BB B800						     mov bx, VIDEO_SEG
+    272	023C  8E C3						     mov es, bx
+    273	023E  5B						     pop bx
+    274
+    275	023F  8B FB						     mov di, bx
+    276	0241  F3> AB						     rep stosw
+    277	0243  8B DF						     mov bx, di
+    278
+    279	0245  5F						     pop di
+    280
+    281	0246  C3						     ret
+    282
+    283
+    284
+    285				     ;-----------------------------
+Turbo Assembler	 Version 4.1	    03/02/20 14:47:58	    Page 6
+ramka3.asm
+
+
+
+    286				     ;transforms ASCII to int from given adress(seperated by comma)
+    287				     ;input:
+    288				     ;di - adress
+    289				     ;output:
+    290				     ;ax - result
+    291				     ;-----------------------------
+    292	0247			     atoi:
+    293	0247  51						     push cx
+    294	0248  33 C0						     xor ax, ax
+    295	024A  B7 00						     mov bh, 00
+    296	024C  B1 0A						     mov cl, 10d
+    297	024E			     transform:
+    298	024E  8A 5D 01						     mov bl, byte [di]
+    299	0251  80 FB 2C						     cmp bl, ','
+    300	0254  74 0F						     je	finish
+    301
+    302	0256  80 FB 0D						     cmp bl, 0Dh
+    303	0259  74 0A						     je	finish
+    304
+    305	025B  80 EB 30						     sub bl, '0'
+    306	025E  F6 E9						     imul cl
+    307	0260  03 C3						     add ax, bx
+    308
+    309	0262  47						     inc di
+    310	0263  EB E9						     jmp transform
+    311	0265			     finish:
+    312	0265  59						     pop cx
+    313	0266  C3						     ret
+    314
+    315
+    316
+    317	0267			     symbol_to_ascii:
+    318	0267  51						     push cx
+    319	0268  33 C0						     xor ax, ax
+    320	026A  B4 00						     mov ah, 00
+    321	026C  8A 45 01						     mov al, byte [di]
+    322	026F  59						     pop cx
+    323	0270  47						     inc di
+    324	0271  47						     inc di
+    325	0272  C3						     ret
+    326
+    327				     end start
+Turbo Assembler	 Version 4.1	    03/02/20 14:47:58	    Page 7
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "03/02/20"
+??FILENAME			  Text	 "ramka3  "
+??TIME				  Text	 "14:47:58"
+??VERSION			  Number 040A
+@32BIT				  Text	 0
+@CODE				  Text	 DGROUP
+@CODESIZE			  Text	 0
+@CPU				  Text	 0101H
+@CURSEG				  Text	 _TEXT
+@DATA				  Text	 DGROUP
+@DATASIZE			  Text	 0
+@FILENAME			  Text	 RAMKA3
+@INTERFACE			  Text	 000H
+@MODEL				  Text	 1
+@STACK				  Text	 DGROUP
+@WORDSIZE			  Text	 2
+ATOI				  Near	 DGROUP:0247
+BL_CORNER			  Number 0004
+BOX_LENGTH			  Number 0028
+BOX_WIDTH			  Number 000F
+BR_CORNER			  Number 0006
+DRAW_BOX			  Near	 DGROUP:019A
+FILL_ARRAY			  Near	 DGROUP:013F
+FINISH				  Near	 DGROUP:0265
+GET_DIMENSIONS			  Near	 DGROUP:0114
+GET_POS				  Near	 DGROUP:0228
+GET_SYMBOLS			  Near	 DGROUP:011E
+GREEN_SHADOW			  Number 2221
+HORIZONTAL_LINE			  Near	 DGROUP:0237
+HOR_LINE			  Number 000A
+INSIDE				  Number 000C
+NEXT				  Near	 DGROUP:01CC
+PSP_COMMAND_LINE		  Number 0081
+SCREEN_LENGTH			  Number 0050
+SCREEN_WIDTH			  Number 0019
+START				  Near	 DGROUP:0100
+SYMBOLS				  Word	 DGROUP:0106
+SYMBOL_TO_ASCII			  Near	 DGROUP:0267
+TL_CORNER			  Number 0000
+TRANSFORM			  Near	 DGROUP:024E
+TR_CORNER			  Number 0002
+VERTICAL_LINE			  Number 0008
+VIDEO_SEG			  Number B800
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+DGROUP				  Group
+  _DATA				  16  0000 Word	  Public  DATA
+  _TEXT				  16  0273 Word	  Public  CODE
+
