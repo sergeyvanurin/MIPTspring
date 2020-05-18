@@ -76,7 +76,7 @@ class list
 		tail = tail->next_node;
 	}
 
-	bool contains(const T& searched_data)
+	const bool contains(const T& searched_data)
 	{
 		node* current_node = head;
 		while (current_node != tail)
@@ -119,7 +119,7 @@ class list
 		}
 	}
 
-	int size()
+	const int size()
 	{
 		return counter;
 	}
