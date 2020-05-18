@@ -16,7 +16,6 @@ start:
 ;dest: al
 ;returns: cx - string length
 ;==========================================
-
 strlen:
 				cld
 				xor cx, cx
@@ -28,7 +27,6 @@ loop_start:
 				inc cx
 				jmp loop_start
 finish:
-				dec cx
 				ret
 				
 				
