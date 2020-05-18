@@ -20,8 +20,15 @@ cpy_loop_start:
 			ret
 			
 
-
+;==========================================
+;size_t strlen ( const char* str );
+;di - str
+;
+;dest: al
+;returns: cx - string length
+;==========================================
 strlen:
+				cld
 				xor cx, cx
 				mov al, 0dh
 				

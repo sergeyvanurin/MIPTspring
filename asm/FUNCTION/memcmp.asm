@@ -6,11 +6,22 @@ start:
 		lea si, msg
         mov cx, 100
         lea di, msg1
+		
         call memcmp
 		
-		ret
+		mov ax, 4c00h
+		int 21h
 
+;==================================================================
+;int memcmp ( const void * ptr1, const void * ptr2, size_t num );
+;si - ptr1
+;di - ptr2
+;cx - num
+;
+;returns: al - relationship between first differrnet charachter
+;==================================================================
 memcmp:
+				cld
 memcmp_loop:
 				repe cmpsb
 				jl lower

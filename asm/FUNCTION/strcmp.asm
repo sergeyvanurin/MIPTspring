@@ -7,7 +7,15 @@ start:
 				call strcmp
 				ret
 
+;==================================
+;int strcmp ( const char* str1, const char* str2 );
+;si - str1
+;di - str2
+;
+;returns: al - relatonship between strings
+;=============================================
 strcmp:			
+				cld
 				push di
 				mov di, si
 				call strlen
@@ -28,8 +36,15 @@ greater:
 				mov al, 1
 				ret
 				
-				
+;==========================================
+;size_t strlen ( const char* str );
+;di - str
+;
+;dest: al
+;returns: cx - string length
+;==========================================			
 strlen:
+				cld
 				xor cx, cx
 				mov al, 0dh
 				

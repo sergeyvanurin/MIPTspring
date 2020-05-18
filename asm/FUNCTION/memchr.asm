@@ -8,21 +8,30 @@ start:
         mov cx, 5
 
         call memchr
-        mov ah, 02h
-        mov dl, [si]
-        int 21h
 
+		mov ax, 4c00h
+		int 21h
+		
+;=========================================================
+;void* memchr ( const void * ptr, unsigned char value, size_t num );
+;di - ptr
+;al - character to find
+;cx - length
+;
+;return: si - pointer to a first value occurrence. NULL if not found
+;==========================================================
 memchr:
-				xor si, si
-				repne scasb
-				jnz exit
+		cld
+		xor si, si
+		repne scasb
+		jnz exit
 				
-				mov si, di
-				dec si
+		mov si, di
+		dec si
 				
 				
 exit:
-				ret
+		ret
 
 		
 msg db 'HELLO', 0h
