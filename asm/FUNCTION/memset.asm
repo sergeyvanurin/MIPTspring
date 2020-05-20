@@ -19,6 +19,7 @@ start:
 ;al - value
 ;cx - num
 ;
+;dest: di, cx
 ;returns: di - destination
 ;=========================================================================
 memset:

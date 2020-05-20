@@ -16,6 +16,7 @@ start:
 ;si - str1
 ;di - str2
 ;
+;dest: si, di, al, cx
 ;returns: al - relatonship between strings
 ;==================================================
 strcmp:			
@@ -59,8 +60,7 @@ loop_start:
 finish:
 		ret
 				
-				
-				
+					
 msg1	db 'hello worldddd',0dh
 msg2	db 'hello worldddd',0dh
 

@@ -19,6 +19,7 @@ start:
 ;al - character to find
 ;cx - length
 ;
+;dest: di, si
 ;return: si - pointer to a first value occurrence. NULL if not found
 ;==========================================================
 memchr:
@@ -29,8 +30,7 @@ memchr:
 				
 		mov si, di
 		dec si
-				
-				
+
 exit:
 		ret
 

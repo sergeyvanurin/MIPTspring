@@ -19,6 +19,7 @@ start:
 ;si - source
 ;cx - num
 ;
+;dest: si ,di, cx
 ;returns: di - destination
 ;======================================================================
 memcpy:

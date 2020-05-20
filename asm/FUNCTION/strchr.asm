@@ -16,6 +16,7 @@ start:
 ;di - str
 ;al - character
 ;
+;dest:
 ;returns:di - pointer to a first occurrence of character in str. NULL if not found
 ;====================================================================================
 strchr:
@@ -23,15 +24,19 @@ strchr:
 
 search_loop:
 		scasb
-		jne search_loop
+		je found
 
 		cmp byte ptr ds:[di], 0dh
 		je not_found
 
-		dec di
-		ret
+		jmp search_loop
+
 not_found:
+
 		xor di, di
+		ret
+found:
+		dec di
 		ret
 
 

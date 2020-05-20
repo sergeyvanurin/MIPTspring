@@ -19,6 +19,7 @@ start:
 ;di - ptr2
 ;cx - num
 ;
+;dest: si, di, al
 ;returns: al - relationship between first differrnet charachter
 ;==================================================================
 memcmp:
