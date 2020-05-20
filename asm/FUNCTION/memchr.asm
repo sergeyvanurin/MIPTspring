@@ -7,12 +7,12 @@ start:
         lea di, msg
         mov al, 'H'
         mov cx, 5
-	    
+        
         call memchr
-	    
+        
         mov ax, 4c00h
         int 21h
-		
+        
 ;=========================================================
 ;void* memchr ( const void * ptr, unsigned char value, size_t num );
 ;di - ptr
@@ -23,19 +23,19 @@ start:
 ;return: si - pointer to a first value occurrence. NULL if not found
 ;==========================================================
 memchr:
-		cld
-		repne scasb
-		jnz exit
-				
-		mov si, di
-		dec si
+        cld
+        repne scasb
+        jnz exit
+                
+        mov si, di
+        dec si
 
-		ret
+        ret
 exit:
-		xor si, si
-		ret
+        xor si, si
+        ret
 
-		
+        
 msg db 'HELLO', 0h
 
 

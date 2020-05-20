@@ -23,22 +23,22 @@ start:
 ;returns: al - relationship between first differrnet charachter
 ;==================================================================
 memcmp:
-		cld
+        cld
 
-		repe cmpsb
-		jl lower
-		jg greater
+        repe cmpsb
+        jl lower
+        jg greater
 
-		mov al, 0
-		ret
+        mov al, 0
+        ret
 greater:
-		mov al, 1
-		ret
+        mov al, 1
+        ret
 lower:
-		mov al, -1
-		ret
+        mov al, -1
+        ret
 
-				
+                
 msg db 'HELLO', 0h
 msg1 db 'WORLD', 0h
 
