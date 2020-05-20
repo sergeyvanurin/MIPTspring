@@ -62,7 +62,7 @@ finish:
                 
                     
 msg1	db 'hello worldddd',0dh
-msg2	db 'hello worldddd',0dh
+msg2	db 'hello worlddda',0dh
 
 end start
                 
