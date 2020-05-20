@@ -24,19 +24,19 @@ start:
 ;==========================================================
 memchr:
 		cld
-		xor si, si
 		repne scasb
 		jnz exit
 				
 		mov si, di
 		dec si
 
+		ret
 exit:
+		xor si, si
 		ret
 
 		
 msg db 'HELLO', 0h
-msg1 db 'WORLD', 0h
 
 
 end start
