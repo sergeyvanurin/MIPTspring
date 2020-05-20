@@ -30,9 +30,9 @@ void MainWindow::on_File_choose_button_clicked()
     if (file_dialog.exec())
     {
         filename = file_dialog.selectedFiles()[0];
+        ui->adress_bar->setText(filename);
+        ui->Patch_button->setEnabled(true);
     }
-    ui->adress_bar->setText(filename);
-    ui->Patch_button->setEnabled(true);
 }
 
 void MainWindow::on_Patch_button_clicked()
@@ -43,28 +43,29 @@ void MainWindow::on_Patch_button_clicked()
         ui->label_under_button->setStyleSheet("QLabel {color:rgb(255,0,0)}");
         ui->label_under_button->setText("Error opening a file :(");
     }
+
     else
     {
         ui->label_under_button->setStyleSheet("QLabel {color:rgb(0,255,0)}");
         ui->label_under_button->setText("Successfuly patched");
+        gif_window = new QWidget;
+        this->hide();
+        QMovie* movie = new QMovie("/Users/vanur/Downloads/hackerman.gif");
+        if (!movie->isValid())
+        {
+            this->show();
+        }
+        else
+        {
+            movie_label = new QLabel(gif_window);
+            movie_label->setGeometry(0, 0, 480, 270);
+            movie_label->setMovie(movie);
+            movie->start();
+            gif_window->show();
+
+        }
     }
 
-    gif_window = new QWidget;
-    this->hide();
-    QMovie* movie = new QMovie("/Users/vanur/Downloads/hackerman.gif");
-    if (!movie->isValid())
-    {
-        this->show();
-    }
-    else
-    {
-        movie_label = new QLabel(gif_window);
-        movie_label->setGeometry(0, 0, 480, 270);
-        movie_label->setMovie(movie);
-        movie->start();
-        gif_window->show();
-
-    }
 }
 
 int MainWindow::Patcher(std::string filename)
