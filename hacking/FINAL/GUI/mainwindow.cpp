@@ -69,19 +69,18 @@ void MainWindow::on_Patch_button_clicked()
 
 int MainWindow::Patcher(std::string filename)
 {
-    FILE* binary_executable = nullptr;
-    binary_executable = fopen(filename.c_str(), "r+");
+    FILE* binary_executable = fopen(filename.c_str(), "r+");
 
     if (!binary_executable)
     {
         return 1;
     }
 
-    unsigned int first_byte_to_patch = 0x33;
-    char first_patch_value = 0x74;
+    const unsigned int first_byte_to_patch = 0x33;
+    const char first_patch_value = 0x74;
 
-    unsigned int second_byte_to_patch = 0x54;
-    char second_patch_value[2] = {(char)0xAC, (char)0xBC};
+    const unsigned int second_byte_to_patch = 0x54;
+    const char second_patch_value[2] = {(const char)0xAC, (const char)0xBC};
 
     fseek(binary_executable, first_byte_to_patch, SEEK_SET);
     fwrite(&first_patch_value, 1, 1, binary_executable);

@@ -16,7 +16,7 @@ start:
 ;si - str1
 ;di - str2
 ;
-;dest: si, di, al, cx
+;dest: si, di, ax, cx
 ;returns: al - relatonship between strings
 ;==================================================
 strcmp:			
