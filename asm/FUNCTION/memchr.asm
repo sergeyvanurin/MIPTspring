@@ -4,14 +4,14 @@ org 100h
 
 
 start:
-		lea di, msg
+        lea di, msg
         mov al, 'H'
         mov cx, 5
-
+	    
         call memchr
-
-		mov ax, 4c00h
-		int 21h
+	    
+        mov ax, 4c00h
+        int 21h
 		
 ;=========================================================
 ;void* memchr ( const void * ptr, unsigned char value, size_t num );
