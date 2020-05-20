@@ -13,19 +13,19 @@ DIM_COUNT                 equ 4
 ELEM_COUNT                equ 7
 ;-------------------------------------
 ;symbols[0] TL_CORNER
-TL_CORNER			      equ 0
+TL_CORNER                 equ 0
 ;symbols[1] TR_CORNER
-TR_CORNER			      equ 2
+TR_CORNER                 equ 2
 ;symbols[2] BL_CORNER
-BL_CORNER			      equ 4
+BL_CORNER                 equ 4
 ;symbols[3] BR_CORNER
-BR_CORNER			      equ 6
+BR_CORNER                 equ 6
 ;symbols[4] VERTICAL_LINE
-VERTICAL_LINE		      equ 8
+VERTICAL_LINE             equ 8
 ;symbols[5] HOR_LINE
-HOR_LINE			      equ 10
+HOR_LINE                  equ 10
 ;symbols[6] INSIDE
-INSIDE				      equ 12
+INSIDE                    equ 12
 ;---------------------------------------
 
 
@@ -67,28 +67,28 @@ fill_array:
             loop fill_array
             
             
-            pop bx		                            ;
-            pop ax		                            ;puts dimensions into designated registers
-            shl bx, 8	                            ;dx - X , di - Y, bh - y, bl - x 
-            or bx, ax	                            ;	
-            pop di		                            ;
-            pop dx		                            ;
+            pop bx                                  ;
+            pop ax                                  ;puts dimensions into designated registers
+            shl bx, 8                               ;dx - X , di - Y, bh - y, bl - x 
+            or bx, ax                               ;	
+            pop di                                  ;
+            pop dx                                  ;
                                                     
-            push bx		                            ;
-            push dx		                            ;
-            push di		                            ;
-            shr di, 2	                            ;
-            shr dx, 2	                            ;
-            mov cx, di	                            ;
-            shl cx, 8	                            ; zoom arithmetics
-            or cx, dx	                            ;
-            add bx, cx	                            ;
-            shl di, 1	                            ;
-            shl dx, 1	                            ;	
+            push bx                                 ;
+            push dx                                 ;
+            push di                                 ;
+            shr di, 2                               ;
+            shr dx, 2                               ;
+            mov cx, di                              ;
+            shl cx, 8                               ; zoom arithmetics
+            or cx, dx                               ;
+            add bx, cx                              ;
+            shl di, 1                               ;
+            shl dx, 1                               ;	
             call draw_box                           ;
-            pop di		                            ;
-            pop dx		                            ;
-            pop bx		                            ;
+            pop di                                  ;
+            pop dx                                  ;
+            pop bx                                  ;
             
             mov ah, 86h
             mov cx, 2
@@ -139,9 +139,9 @@ draw_box:
             inc bx
             inc bx
             
-            add bx, SCREEN_LENGTH * 2 - 4               ;
-            sub bx, dx                                  ;add bx, (SCREEN_LENGTH - di + 2)*2
-            sub bx, dx                                  ;
+            add bx, SCREEN_LENGTH * 2 - 4           ;
+            sub bx, dx                              ;add bx, (SCREEN_LENGTH - di + 2)*2
+            sub bx, dx                              ;
             
             
             mov ax, symbols[INSIDE]
@@ -167,9 +167,9 @@ next:
             
             mov es:[bx], GREEN_SHADOW
         
-            add bx, SCREEN_LENGTH * 2 - 4               ;
-            sub bx, dx                                  ;add bx, (SCREEN_LENGTH - di - 2)*2
-            sub bx, dx                                  ;
+            add bx, SCREEN_LENGTH * 2 - 4           ;
+            sub bx, dx                              ;add bx, (SCREEN_LENGTH - di - 2)*2
+            sub bx, dx                              ;
             
             pop cx
             
@@ -195,8 +195,8 @@ next:
             inc bx
             
             
-            add bx, SCREEN_LENGTH * 2 - 4				;
-            sub bx, dx									;	add bx, (SCREEN_LENGTH - di - 2)*2
+            add bx, SCREEN_LENGTH * 2 - 4           ;
+            sub bx, dx                              ;add bx, (SCREEN_LENGTH - di - 2)*2
             sub bx, dx
             
             mov cx, dx
