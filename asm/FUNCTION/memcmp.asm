@@ -19,28 +19,28 @@ start:
 ;di - ptr2
 ;cx - num
 ;
-;dest: si, di, al
+;dest: si, di, ax
 ;returns: al - relationship between first differrnet charachter
 ;==================================================================
 memcmp:
         cld
 
         repe cmpsb
-        jl lower
-        jg greater
+        
+        je equal
+        
+        mov al, [si - 1]
+        mov ah, [di - 1]
+        sub al, ah
+        ret
 
+equal:
         mov al, 0
-        ret
-greater:
-        mov al, 1
-        ret
-lower:
-        mov al, -1
         ret
 
                 
 msg db 'HELLO', 0h
-msg1 db 'WORLD', 0h
+msg1 db 'HELL', 0h
 
 
 end start
