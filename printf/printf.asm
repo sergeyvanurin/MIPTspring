@@ -8,8 +8,8 @@ print_buffer: times 256 db 1
                         db 0
 
 number_buffer: times 32 db 0
-msg: db 'I %s %x. %d%%%c%b', 0
-string1: db 'love', 0
+msg:                    db 'I %s %x. %d%%%c%b', 0
+string1:                db 'love', 0
 
 jump_table:
                         dq binary_case                                 ; b
@@ -38,22 +38,22 @@ JMP_TABLE_UPPER_BOUND   equ 22
 ;------------------------------------------------------------------------------------------
 
 start:
-            push 127                         ;
-            push '!'                         ;
-            push -100                        ; 
-            push 3802                        ;
-                                             ; } передача аргументов и вызов функции printf
-            lea rax, [rel string1]           ;
-            push rax                         ;
-                                             ;
-            lea rax, [rel msg]               ;
-            push rax                         ;
-            call printf                      ;
+            push 127                        ;
+            push '!'                        ;
+            push -100                       ; 
+            push 3802                       ;
+                                            ; } передача аргументов и вызов функции printf
+            lea rax, [rel string1]          ;
+            push rax                        ;
+                                            ;
+            lea rax, [rel msg]              ;
+            push rax                        ;
+            call printf                     ;
             add esp, 48
 
-            mov rax, SYSCALL_EXIT            ;
-            mov rbx, 0                       ; } выход
-            syscall                          ;
+            mov rax, SYSCALL_EXIT           ;
+            mov rbx, 0                      ; } выход
+            syscall                         ;
 
 ;==========================================================================================
 ;функция printf (format_string, arg1, ...);
