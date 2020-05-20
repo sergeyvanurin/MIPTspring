@@ -4,6 +4,7 @@
 #include <QObject>
 #include <fstream>
 #include <cstdio>
+#include <QMovie>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -48,6 +49,22 @@ void MainWindow::on_Patch_button_clicked()
         ui->label_under_button->setText("Successfuly patched");
     }
 
+    gif_window = new QWidget;
+    this->hide();
+    QMovie* movie = new QMovie("/Users/vanur/Downloads/hackerman.gif");
+    if (!movie->isValid())
+    {
+        this->show();
+    }
+    else
+    {
+        movie_label = new QLabel(gif_window);
+        movie_label->setGeometry(0, 0, 480, 270);
+        movie_label->setMovie(movie);
+        movie->start();
+        gif_window->show();
+
+    }
 }
 
 int MainWindow::Patcher(std::string filename)
@@ -76,3 +93,4 @@ int MainWindow::Patcher(std::string filename)
 
     return 0;
 }
+
