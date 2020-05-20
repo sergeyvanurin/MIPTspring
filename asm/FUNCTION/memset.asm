@@ -2,6 +2,7 @@
 .code
 org 100h
 
+
 start:
         lea di, msg
         mov al, 'E'

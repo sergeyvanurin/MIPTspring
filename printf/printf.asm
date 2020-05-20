@@ -1,38 +1,40 @@
 ;nasm -f  macho64 -g printf.asm
 ;ld -macosx_version_min 10.7.0 -lSystem -o printf printf.o
+
 global start
 ;------------------------------------------------------------------------------------------
 section .data
 print_buffer: times 256 db 1
                         db 0
+
 number_buffer: times 32 db 0
 msg: db 'I %s %x. %d%%%c%b', 0
 string1: db 'love', 0
 
 jump_table:
-            dq binary_case                                 ; b
-            dq char_case                                   ; c
-            dq integer_case                                ; d
-            times ('h' - 'e' + 1) dq default_case          ; e f g h (4 буквы)
-            dq integer_case                                ; i
-            times ('n' - 'j' + 1) dq default_case          ; j k l m n (5 букв)
-            dq octa_case                                   ; o 
-            times ('r' - 'p' + 1) dq default_case          ; p q r (3 буквы)
-            dq string_case                                 ; s
-            times ('w' - 't' + 1) dq default_case          ; t u v w (4 буквы)
-            dq hex_case                                    ; x
+                        dq binary_case                                 ; b
+                        dq char_case                                   ; c
+                        dq integer_case                                ; d
+                        times ('h' - 'e' + 1) dq default_case          ; e f g h (4 буквы)
+                        dq integer_case                                ; i
+                        times ('n' - 'j' + 1) dq default_case          ; j k l m n (5 букв)
+                        dq octa_case                                   ; o 
+                        times ('r' - 'p' + 1) dq default_case          ; p q r (3 буквы)
+                        dq string_case                                 ; s
+                        times ('w' - 't' + 1) dq default_case          ; t u v w (4 буквы)
+                        dq hex_case                                    ; x
 ;------------------------------------------------------------------------------------------
 
 section .text
 
-;-------------------------------------константы--------------------------------------------
-BUFFER_BOUND equ 0
-ALPHABET_OFFSET equ 'b'
-SYSCALL_EXIT equ 0x2000001
-SYSCALL_OUT equ 0x2000004
-ARG_OFFSET equ 2
-HEX_LETTER_OFFSET equ 7
-JMP_TABLE_UPPER_BOUND equ 22
+;-------------------------------------constans---------------------------------------------
+BUFFER_BOUND            equ 0
+ALPHABET_OFFSET         equ 'b'
+SYSCALL_EXIT            equ 0x2000001
+SYSCALL_OUT             equ 0x2000004
+ARG_OFFSET              equ 2
+HEX_LETTER_OFFSET       equ 7
+JMP_TABLE_UPPER_BOUND   equ 22
 ;------------------------------------------------------------------------------------------
 
 start:
@@ -47,6 +49,7 @@ start:
             lea rax, [rel msg]               ;
             push rax                         ;
             call printf                      ;
+            add esp, 48
 
             mov rax, SYSCALL_EXIT            ;
             mov rbx, 0                       ; } выход
@@ -74,7 +77,7 @@ loop_start:
             cmp byte [rsi], byte 0          ;проверка на конец форматной строчки
             je loop_ending
 
-            cmp byte [rdi], BUFFER_BOUND             ;проверка на конец буфера
+            cmp byte [rdi], BUFFER_BOUND    ;проверка на конец буфера
             jne .no_overflow                ;выгрузка если конец
             call dump_buffer
 
@@ -93,6 +96,7 @@ loop_ending:
             pop rbp                         ; } возвращение стека в первоначальный вид и выход из функции
 
             ret
+
 
 printf_argument:
             inc rsi                         ;передвижение каретки на идентификатор 
@@ -183,7 +187,7 @@ octa_case:
             jmp argument_end
 
 hex_case:
-            mov cl, 4                      ;перенос base в cl
+            mov cl, 4                       ;перенос base в cl
             call decimal_to_baseN
 
             jmp argument_end
