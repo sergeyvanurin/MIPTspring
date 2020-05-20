@@ -2,30 +2,30 @@
 .code
 org 100h
 ;-------------------------------------
-SCREEN_WIDTH        equ 25
-SCREEN_LENGTH       equ 80
-BOX_WIDTH           equ 15
-BOX_LENGTH          equ 40
-VIDEO_SEG           equ 0b800h
-GREEN_SHADOW        equ 2221h
-PSP_COMMAND_LINE    equ 81h
-DIM_COUNT           equ 4
-ELEM_COUNT          equ 7
+SCREEN_WIDTH              equ 25
+SCREEN_LENGTH             equ 80
+BOX_WIDTH                 equ 15
+BOX_LENGTH                equ 40
+VIDEO_SEG                 equ 0b800h
+GREEN_SHADOW              equ 2221h
+PSP_COMMAND_LINE          equ 81h
+DIM_COUNT                 equ 4
+ELEM_COUNT                equ 7
 ;-------------------------------------
 ;symbols[0] TL_CORNER
-TL_CORNER			equ 0
+TL_CORNER			      equ 0
 ;symbols[1] TR_CORNER
-TR_CORNER			equ 2
+TR_CORNER			      equ 2
 ;symbols[2] BL_CORNER
-BL_CORNER			equ 4
+BL_CORNER			      equ 4
 ;symbols[3] BR_CORNER
-BR_CORNER			equ 6
+BR_CORNER			      equ 6
 ;symbols[4] VERTICAL_LINE
-VERTICAL_LINE		equ 8
+VERTICAL_LINE		      equ 8
 ;symbols[5] HOR_LINE
-HOR_LINE			equ 10
+HOR_LINE			      equ 10
 ;symbols[6] INSIDE
-INSIDE				equ 12
+INSIDE				      equ 12
 ;---------------------------------------
 
 
