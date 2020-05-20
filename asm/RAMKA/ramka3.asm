@@ -2,15 +2,15 @@
 .code
 org 100h
 ;-------------------------------------
-SCREEN_WIDTH		equ 25
-SCREEN_LENGTH		equ 80
-BOX_WIDTH			equ 15
-BOX_LENGTH			equ 40
-VIDEO_SEG			equ 0b800h
-GREEN_SHADOW		equ 2221h
-PSP_COMMAND_LINE	equ 81h
-DIM_COUNT			equ 4
-ELEM_COUNT			equ 7
+SCREEN_WIDTH        equ 25
+SCREEN_LENGTH       equ 80
+BOX_WIDTH           equ 15
+BOX_LENGTH          equ 40
+VIDEO_SEG           equ 0b800h
+GREEN_SHADOW        equ 2221h
+PSP_COMMAND_LINE    equ 81h
+DIM_COUNT           equ 4
+ELEM_COUNT          equ 7
 ;-------------------------------------
 ;symbols[0] TL_CORNER
 TL_CORNER			equ 0
@@ -30,15 +30,15 @@ INSIDE				equ 12
 
 
 start:
-            mov di, PSP_COMMAND_LINE				;argument adress
-            mov cx, DIM_COUNT						;argument count
+            mov di, PSP_COMMAND_LINE                ;argument adress
+            mov cx, DIM_COUNT                       ;argument count
             symbols dw ELEM_COUNT DUP(?)
             
 get_dimensions:
 
-            call atoi								;
-            push ax									;gets dimensions from PSP
-            inc di									;
+            call ato                                
+            push ax                                 ;get dimensions from PSP
+            inc di                                
             
             loop get_dimensions
             
@@ -67,28 +67,28 @@ fill_array:
             loop fill_array
             
             
-            pop bx									;
-            pop ax									;puts dimensions into designated registers
-            shl bx, 8								;dx - X , di - Y, bh - y, bl - x 
-            or bx, ax								;	
-            pop di									;
-            pop dx									;
-            
-            push bx									;
-            push dx									;
-            push di									;
-            shr di, 2								;
-            shr dx, 2								;
-            mov cx, di								;
-            shl cx, 8								; zoom arithmetics
-            or cx, dx								;
-            add bx, cx								;
-            shl di, 1								;
-            shl dx, 1								;	
-            call draw_box							;
-            pop di									;
-            pop dx									;
-            pop bx									;
+            pop bx		                            ;
+            pop ax		                            ;puts dimensions into designated registers
+            shl bx, 8	                            ;dx - X , di - Y, bh - y, bl - x 
+            or bx, ax	                            ;	
+            pop di		                            ;
+            pop dx		                            ;
+                                                    
+            push bx		                            ;
+            push dx		                            ;
+            push di		                            ;
+            shr di, 2	                            ;
+            shr dx, 2	                            ;
+            mov cx, di	                            ;
+            shl cx, 8	                            ; zoom arithmetics
+            or cx, dx	                            ;
+            add bx, cx	                            ;
+            shl di, 1	                            ;
+            shl dx, 1	                            ;	
+            call draw_box                           ;
+            pop di		                            ;
+            pop dx		                            ;
+            pop bx		                            ;
             
             mov ah, 86h
             mov cx, 2
@@ -139,9 +139,9 @@ draw_box:
             inc bx
             inc bx
             
-            add bx, SCREEN_LENGTH * 2 - 4				;
-            sub bx, dx									;	add bx, (SCREEN_LENGTH - di + 2)*2
-            sub bx, dx									;
+            add bx, SCREEN_LENGTH * 2 - 4               ;
+            sub bx, dx                                  ;add bx, (SCREEN_LENGTH - di + 2)*2
+            sub bx, dx                                  ;
             
             
             mov ax, symbols[INSIDE]
@@ -167,9 +167,9 @@ next:
             
             mov es:[bx], GREEN_SHADOW
         
-            add bx, SCREEN_LENGTH * 2 - 4				;
-            sub bx, dx									;	add bx, (SCREEN_LENGTH - di - 2)*2
-            sub bx, dx									;
+            add bx, SCREEN_LENGTH * 2 - 4               ;
+            sub bx, dx                                  ;add bx, (SCREEN_LENGTH - di - 2)*2
+            sub bx, dx                                  ;
             
             pop cx
             
