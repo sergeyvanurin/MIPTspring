@@ -11,26 +11,25 @@ start:
 		mov ax, 4c00h
 		int 21h
 
-;==================================
+;==================================================
 ;int strcmp ( const char* str1, const char* str2 );
 ;si - str1
 ;di - str2
 ;
 ;returns: al - relatonship between strings
-;=============================================
+;==================================================
 strcmp:			
 		cld
 		push di
-		mov di, si
 		call strlen
 		pop di
+		inc cx
 		
 		cld
 		repe cmpsb
-		je same
 		jl less
 		jg greater
-same:
+
 		mov al, 0
 		ret
 less:
@@ -40,13 +39,13 @@ greater:
 		mov al, 1
 		ret
 				
-;==========================================
+;==================================================
 ;size_t strlen ( const char* str );
 ;di - str
 ;
 ;dest: al
 ;returns: cx - string length
-;==========================================			
+;==================================================			
 strlen:
 		cld
 		xor cx, cx
@@ -62,8 +61,8 @@ finish:
 				
 				
 				
-msg1	db 'hello world',0dh
-msg2	db 'Hello world',0dh
+msg1	db 'hello worldddd',0dh
+msg2	db 'hello worldddd',0dh
 
 end start
 				
