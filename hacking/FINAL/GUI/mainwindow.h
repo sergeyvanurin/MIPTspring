@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QLabel>
 #include <QPushButton>
 #include <QErrorMessage>
 
@@ -20,10 +21,12 @@ private slots:
     void on_File_choose_button_clicked();
 
     void on_Patch_button_clicked();
-
 private:
     Ui::MainWindow *ui;
+    QWidget* gif_window;
+    QLabel* movie_label;
     QString filename;
     int Patcher(std::string filename);
+
 };
 #endif // MAINWINDOW_H
