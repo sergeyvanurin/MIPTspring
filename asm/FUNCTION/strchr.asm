@@ -21,15 +21,13 @@ start:
 ;====================================================================================
 strchr:
 		cld
-		cmp byte ptr ds:[di], 0h        ;if di is empty
-		jne not_found
 
 search_loop:
+        cmp byte ptr ds:[di], 0h
+		je not_found
+
 		scasb
 		je found
-
-		cmp byte ptr ds:[di], 0h
-		je not_found
 
 		jmp search_loop
 
