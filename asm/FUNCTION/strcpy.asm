@@ -4,32 +4,32 @@ org 100h
 
 
 start:
-		lea di, msg1
-		lea si, msg2
-		call strcpy
+        lea di, msg1
+        lea si, msg2
+        call strcpy
 
-		mov ax, 4c00h
-		int 21h
+        mov ax, 4c00h
+        int 21h
 
 ;=====================================================
 ;char * strcpy( char * destptr, const char * srcptr );
 ;di - destpr
 ;si - srcptr
 ;
-;dest: al, cx
+;dest: al, cx, di, si
 ;returns: di - destintaion ptr
 ;=====================================================
 strcpy:
-		push di
-		mov di, si
-		call strlen
-		inc cx
-		pop di
-		
-		rep movsb
+        push di
+        mov di, si
+        call strlen
+        inc cx
+        pop di
+        
+        rep movsb
 
-		ret
-			
+        ret
+            
 
 ;==========================================
 ;size_t strlen ( const char* str );
@@ -39,19 +39,19 @@ strcpy:
 ;returns: cx - string length
 ;==========================================
 strlen:
-		cld
-		xor cx, cx
-		mov al, 0dh
-				
+        cld
+        xor cx, cx
+        mov al, 0dh
+                
 loop_start:	
-		scasb
-		je finish
-		inc cx
-		jmp loop_start
+        scasb
+        je finish
+        inc cx
+        jmp loop_start
 finish:
-		ret
-				
-				
+        ret
+                
+                
 msg1	db 'PIZZA', 0dh
 msg2	db 'time', 0dh
 

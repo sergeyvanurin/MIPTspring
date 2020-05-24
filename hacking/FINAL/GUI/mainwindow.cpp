@@ -70,8 +70,7 @@ void MainWindow::on_Patch_button_clicked()
 
 int MainWindow::Patcher(std::string filename)
 {
-    FILE* binary_executable = nullptr;
-    binary_executable = fopen(filename.c_str(), "r+");
+    FILE* binary_executable = fopen(filename.c_str(), "r+");
 
     if (!binary_executable)
     {
