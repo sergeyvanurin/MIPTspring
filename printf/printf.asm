@@ -1,9 +1,15 @@
-;nasm -f  macho64 -g printf.asm
-;ld -macosx_version_min 10.7.0 -lSystem -o printf printf.o
-
-global start
+global my_printf
+;-------------------------------------constans---------------------------------------------
+BUFFER_BOUND            equ 0
+ALPHABET_OFFSET         equ 'b'
+SYSCALL_EXIT            equ 0x2000001
+SYSCALL_OUT             equ 0x2000004
+ARG_OFFSET              equ 2
+HEX_LETTER_OFFSET       equ 7
+JMP_TABLE_UPPER_BOUND   equ 22
 ;------------------------------------------------------------------------------------------
 section .data
+;------------------------------------------------------------------------------------------
 print_buffer: times 256 db 1
                         db 0
 
@@ -24,36 +30,7 @@ jump_table:
                         times ('w' - 't' + 1) dq default_case          ; t u v w (4 буквы)
                         dq hex_case                                    ; x
 ;------------------------------------------------------------------------------------------
-
 section .text
-
-;-------------------------------------constans---------------------------------------------
-BUFFER_BOUND            equ 0
-ALPHABET_OFFSET         equ 'b'
-SYSCALL_EXIT            equ 0x2000001
-SYSCALL_OUT             equ 0x2000004
-ARG_OFFSET              equ 2
-HEX_LETTER_OFFSET       equ 7
-JMP_TABLE_UPPER_BOUND   equ 22
-;------------------------------------------------------------------------------------------
-
-start:
-            push 127                        ;
-            push '!'                        ;
-            push -100                       ; 
-            push 3802                       ;
-                                            ; } передача аргументов и вызов функции printf
-            lea rax, [rel string1]          ;
-            push rax                        ;
-                                            ;
-            lea rax, [rel msg]              ;
-            push rax                        ;
-            call printf                     ;
-            add esp, 48
-
-            mov rax, SYSCALL_EXIT           ;
-            mov rbx, 0                      ; } выход
-            syscall                         ;
 
 ;==========================================================================================
 ;функция printf (format_string, arg1, ...);
@@ -62,7 +39,7 @@ start:
 ;in: в соответствии c формамтной строчкой
 ;dest: rax, rbx, rcx, rdx, rsi, rdi, r8, r10, r11, r12
 ;==========================================================================================
-printf:
+my_printf:
             push rbp                        ;сохранение rbp
             mov rbp, rsp                    ;смещение rsp в rbp
 
