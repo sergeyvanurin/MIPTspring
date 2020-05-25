@@ -75,6 +75,3 @@ start:
             mov rax, SYSCALL_EXIT           ;
             mov rbx, 0                      ; } выход
             syscall                         ;
-
-print_string:
-            
