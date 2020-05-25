@@ -1,5 +1,5 @@
 global my_printf
-;-------------------------------------constans---------------------------------------------
+;-------------------------------------constants---------------------------------------------
 BUFFER_BOUND            equ 0
 ALPHABET_OFFSET         equ 'b'
 SYSCALL_EXIT            equ 0x2000001
@@ -43,6 +43,8 @@ my_printf:
             push rbp                        ;сохранение rbp
             mov rbp, rsp                    ;смещение rsp в rbp
 
+            cld
+
             mov r11, ARG_OFFSET             ;создание счетчика аргументов
             lea r12, [rel jump_table]       ;адрес таблицы прыжков
 
@@ -64,7 +66,7 @@ loop_start:
 			
             movsb                           ;передвижение символов в буффер
 
-			jmp loop_start                  ;
+            jmp loop_start                  ;
 
 loop_ending:
             call dump_buffer                ;выгрузка буффера  
@@ -73,7 +75,6 @@ loop_ending:
             pop rbp                         ; } возвращение стека в первоначальный вид и выход из функции
 
             ret
-
 
 printf_argument:
             inc rsi                         ;передвижение каретки на идентификатор 
